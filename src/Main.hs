@@ -6,7 +6,7 @@ import Utils
 
 main :: IO ()
 main =
-    putStrLn message 
+  putStrLn message 
     where
         message = displayBoard res ++ "\n" ++ whoWon res 'X' 'O'
-        res = playgame Player1.move Player2.move 'X' 'O' getstart
+        res = playGame Player1.move Player2.move 'X' 'O' getStart

@@ -2,10 +2,10 @@
 
 module Utils
 ( result,
-  playgame,
+  playGame,
   finished,
   whoWon,
-  getstart,
+  getStart,
   displayBoard
 ) where
 
@@ -28,8 +28,8 @@ result b
 finished :: String -> Bool
 finished b = (result b /= '-') || isNothing ('-' `elemIndex` b) 
 
-getstart :: String
-getstart = ['-','-','-','-','-','-','-','-','-']   
+getStart :: String
+getStart = ['-','-','-','-','-','-','-','-','-']   
 
 displayBoard :: forall a. Show a => [a] -> String
 displayBoard b = " " ++
@@ -60,11 +60,11 @@ applyMove index symbol board = if (board !! index) /= '-' then
     (show index ++ displayBoard board ++ "\nEverything went wrong")
   else replaceNth index symbol board    
      
-playgame :: (Char -> String -> Int)
+playGame :: (Char -> String -> Int)
                 -> (Char -> String -> Int)
                 -> Char
                 -> Char
                 -> String
                 -> String
-playgame m1 m2 s1 s2 b = if finished b then b else
-  playgame m2 m1 s2 s1 (applyMove (m1 s1 b) s1 b)
+playGame m1 m2 s1 s2 b = if finished b then b else
+  playGame m2 m1 s2 s1 (applyMove (m1 s1 b) s1 b)
