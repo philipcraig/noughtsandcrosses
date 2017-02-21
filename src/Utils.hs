@@ -24,7 +24,7 @@ result b
   | (b!!2 /= '-') && (b!!2 == b!!4) && (b!!4==b!!6) =  b !! 2
   | otherwise = '-'
   
--- Are their blank squares available?
+-- Are there blank squares available?
 finished :: String -> Bool
 finished b = (result b /= '-') || isNothing ('-' `elemIndex` b) 
 
