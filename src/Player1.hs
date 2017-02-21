@@ -1,14 +1,14 @@
-{-# LANGUAGE RankNTypes #-}
-
 module Player1
 ( move
 )
 where
 
-indexOfFirstBlank :: Num t => t -> String -> t
+import Types
+
+indexOfFirstBlank :: Int -> String -> Int
 indexOfFirstBlank n b
     | head b == '-' = n
     | otherwise = indexOfFirstBlank (n + 1) (tail b)
 
-move :: Char -> String -> Int
+move :: Move
 move _s = indexOfFirstBlank 0

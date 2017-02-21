@@ -12,6 +12,8 @@ module Utils
 import Data.List
 import Data.Maybe
 
+import Types
+
 result :: String -> Char
 result b
   | (head b /= '-') && (head b == b!!1) && (b!!1==b!!2) =  head b
@@ -60,11 +62,6 @@ applyMove index symbol board = if (board !! index) /= '-' then
     (show index ++ displayBoard board ++ "\nEverything went wrong")
   else replaceNth index symbol board    
      
-playGame :: (Char -> String -> Int)
-                -> (Char -> String -> Int)
-                -> Char
-                -> Char
-                -> String
-                -> String
+playGame :: Move -> Move -> Char  -> Char -> String -> String
 playGame m1 m2 s1 s2 b = if finished b then b else
   playGame m2 m1 s2 s1 (applyMove (m1 s1 b) s1 b)
