@@ -3,12 +3,7 @@ module Player1
 )
 where
 
-import Types
-
-indexOfFirstBlank :: Int -> String -> Int
-indexOfFirstBlank n b
-    | head b == '-' = n
-    | otherwise = indexOfFirstBlank (n + 1) (tail b)
+import Utils
 
 move :: Move
-move _s = indexOfFirstBlank 0
+move _s b = head (unusedPositions b)

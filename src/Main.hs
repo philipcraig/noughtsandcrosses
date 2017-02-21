@@ -3,10 +3,11 @@ module Main where
 import Player1
 import Player2
 import Utils
+import Utils (Symbol(..))
 
 main :: IO ()
 main =
   putStrLn message 
     where
-        message = displayBoard res ++ "\n" ++ whoWon res 'X' 'O'
-        res = playGame Player1.move Player2.move 'X' 'O' getStart
+        message = (showBoard res) ++ "\n" ++ whoWon res X O
+        res = playGame Player1.move Player2.move X O newBoard

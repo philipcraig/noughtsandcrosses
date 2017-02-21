@@ -1,67 +1,83 @@
-{-# LANGUAGE RankNTypes #-}
-
 module Utils
-( result,
-  playGame,
-  finished,
-  whoWon,
-  getStart,
-  displayBoard
+(   result
+  , playGame
+  , finished
+  , whoWon
+  , newBoard
+  , unusedPositions
+  , Move
+  , Symbol(..)
+  , showBoard
 ) where
 
 import Data.List
-import Data.Maybe
 
-import Types
+result :: Board -> Maybe [Cell]
+result board = find full $ rows board ++ cols board ++ diagonals board
+  where
+    full [a, b, c] = a == b && b == c
+    full _ = False
+    rows = id
+    cols = transpose
+    diagonals [[a1, _, b1],
+               [_ , c, _],
+               [b2, _, a2]] = [[a1, c, a2],[b1, c, b2]]
+    diagonals _ = []
 
-result :: String -> Char
-result b
-  | (head b /= '-') && (head b == b!!1) && (b!!1==b!!2) =  head b
-  | (b!!3 /= '-') && (b!!3 == b!!4) && (b!!4==b!!5) =  b !! 3
-  | (b!!6 /= '-') && (b!!6 == b!!7) && (b!!7==b!!8) =  b !! 6
-  | (head b /= '-') && (head b == b!!3) && (b!!3==b!!6) =  head b
-  | (b!!1 /= '-') && (b!!1 == b!!4) && (b!!4==b!!7) =  b !! 1
-  | (b!!2 /= '-') && (b!!2 == b!!5) && (b!!5==b!!8) =  b !! 2
-  | (head b /= '-') && (head b == b!!4) && (b!!4==b!!8) =  head b
-  | (b!!2 /= '-') && (b!!2 == b!!4) && (b!!4==b!!6) =  b !! 2
-  | otherwise = '-'
-  
--- Are there blank squares available?
-finished :: String -> Bool
-finished b = (result b /= '-') || isNothing ('-' `elemIndex` b) 
+-- Have either of the board filling up or a player winning happened?
+finished :: Board -> Bool
+finished b
+  | null (unusedPositions b) = True
+  | result b == Nothing = False
+  | otherwise = True
 
-getStart :: String
-getStart = ['-','-','-','-','-','-','-','-','-']   
+whoWon :: Board -> Symbol -> Symbol -> String
+whoWon b _s1 _s2 = case result b of
+  Just _ -> "Somebody won" -- figure out how to unpack the winner later
+  Nothing ->  "Tied game"
 
-displayBoard :: forall a. Show a => [a] -> String
-displayBoard b = " " ++
-  show (head b) ++
-    show (b !! 1) ++
-      show (b !! 2) ++
-        "\n " ++
-          show (b !! 3) ++
-            show (b !! 4) ++
-              show (b !! 5) ++
-                "\n " ++ show (b !! 6) ++ show (b !! 7) ++ show (b !! 8) ++ "\n" 
+replaceNth :: Int -> Symbol -> Board -> Board
+replaceNth n s = map (map replace)
+  where
+  replace (Left n') | n' == n = Right s
+  replace square              = square
 
-whoWon :: String -> Char -> Char -> String
-whoWon b s1 s2
-  | result b == s1 = "Player 1 wins"  
-  | result b == s2 = "Player 2 wins"  
-  | result b == '-' =  "Tie game"  
-  | otherwise = "No idea how you got here"
+unusedPositions :: Board -> [Int]
+unusedPositions board = [i | Left i <- concat board]
 
-replaceNth :: forall t a. (Num t, Eq t) => t -> a -> [a] -> [a]
-replaceNth n newVal vec
-     | n == 0 = newVal : tail vec
-     | otherwise = head vec : replaceNth (n - 1) newVal (tail vec)
-
-applyMove :: Int -> Char -> String -> String
-applyMove index symbol board = if (board !! index) /= '-' then
-  error
-    (show index ++ displayBoard board ++ "\nEverything went wrong")
-  else replaceNth index symbol board    
+applyMove :: Int -> Symbol -> Board -> Board
+applyMove index symbol board
+  | index `notElem` unusedPositions board =
+    error (show index ++ showBoard board ++ "\nIllegal move position requested")
+  | otherwise = replaceNth index symbol board
      
-playGame :: Move -> Move -> Char  -> Char -> String -> String
-playGame m1 m2 s1 s2 b = if finished b then b else
+playGame :: Move -> Move -> Symbol -> Symbol -> Board -> Board
+playGame m1 m2 s1 s2 b =
+  if finished b then b else
   playGame m2 m1 s2 s1 (applyMove (m1 s1 b) s1 b)
+
+-- the type of a function that computes a move
+type Move = (Symbol -> Board -> Int)
+
+-- a board is a list of lists of either position numbers or played symbols
+data Symbol = O | X deriving (Show, Eq)
+type Cell = Either Int Symbol
+type Board = [[Cell]]
+
+-- return a new board
+-- by convention, for noughts and crosses
+-- there are three rows and columns
+-- a board Cell holds a number until someone moves on it
+newBoard :: Board
+newBoard = map (map Left) [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+showSquare :: Either Int Symbol -> [Char]
+showSquare = either (\n -> " " ++ show n ++ " ") (concat . replicate 3 . show)
+
+showBoard :: Board -> String
+showBoard board =
+      unlines . surround "+---+---+---+"
+    . map (concat . surround "|". map showSquare)
+    $ board
+    where
+    surround x xs = [x] ++ intersperse x xs ++ [x]
