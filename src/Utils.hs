@@ -11,6 +11,7 @@ module Utils
 
 import Data.List
 
+-- return the first winning set of cells it finds, or Nothing
 result :: Board -> Maybe [Cell]
 result board = find full $ rows board ++ cols board ++ diagonals board
   where
@@ -31,6 +32,7 @@ finished b
   | otherwise = True
 
 -- pretty awful pattern matching. Needs improvement
+-- fix via improving the return type of result
 whoWon :: Board -> Symbol -> Symbol -> String
 whoWon b s1 _ = case result b of
   Nothing ->  "Tied game"
