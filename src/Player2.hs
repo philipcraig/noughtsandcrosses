@@ -1,7 +1,6 @@
 module Player2
-( move
-)
-where
+  ( move
+  ) where
 
 import Utils
 
