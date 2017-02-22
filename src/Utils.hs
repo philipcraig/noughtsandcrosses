@@ -31,10 +31,12 @@ finished b
   | result b == Nothing = False
   | otherwise = True
 
+-- pretty awful pattern matching. Needs improvement
 whoWon :: Board -> Symbol -> Symbol -> String
-whoWon b _s1 _s2 = case result b of
-  Just _ -> "Somebody won" -- figure out how to unpack the winner later
+whoWon b s1 _ = case result b of
   Nothing ->  "Tied game"
+  Just ((Right s):_:_) -> if (s == s1) then "Player 1 won" else "Player 2 won"
+  _ -> error "can't happen!"
 
 replaceNth :: Int -> Symbol -> Board -> Board
 replaceNth n s = map (map replace)
