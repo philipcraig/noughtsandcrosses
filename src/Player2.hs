@@ -5,4 +5,4 @@ module Player2
 import Utils
 
 move :: Move
-move _s b = head (unusedPositions b)
+move _s b = last (unusedPositions b)

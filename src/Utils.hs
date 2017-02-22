@@ -1,8 +1,6 @@
 module Utils
-  ( result
-  , playGame
+  ( playGame
   , whoWon
-  , newBoard
   , unusedPositions
   , Move
   , Symbol(..)
@@ -29,16 +27,11 @@ finished b
   | result b == Nothing = False
   | otherwise = True
 
--- pretty awful pattern matching. Needs improvement
--- fix via improving the return type of result
-whoWon :: Board -> Symbol -> Symbol -> String
-whoWon b s1 _ =
+whoWon :: Board -> String
+whoWon b =
   case result b of
     Nothing -> "Tied game"
-    Just ((Right s):_:_) ->
-      if (s == s1)
-        then "Player 1 won"
-        else "Player 2 won"
+    Just ((Right s):_:_) -> (show s) ++ " player won"
     _ -> error "can't happen!"
 
 replaceNth :: Int -> Symbol -> Board -> Board
@@ -57,11 +50,17 @@ applyMove index symbol board
     error (show index ++ showBoard board ++ "\nIllegal move position requested")
   | otherwise = replaceNth index symbol board
 
-playGame :: Move -> Move -> Symbol -> Symbol -> Board -> Board
-playGame m1 m2 s1 s2 b =
+playGame :: Move -> Move -> Symbol -> Symbol -> Board
+playGame m1 m2 s1 s2 =
+  playMidGame m2 m1 s2 s1 (applyMove (m1 s1 b) s1 b)
+  where
+    b = newBoard
+
+playMidGame :: Move -> Move -> Symbol -> Symbol -> Board -> Board
+playMidGame m1 m2 s1 s2 b =
   if finished b
     then b
-    else playGame m2 m1 s2 s1 (applyMove (m1 s1 b) s1 b)
+    else playMidGame m2 m1 s2 s1 (applyMove (m1 s1 b) s1 b)
 
 -- the type of a function that computes a move
 type Move = (Symbol -> Board -> Int)
@@ -83,13 +82,12 @@ type Board = [[Cell]]
 newBoard :: Board
 newBoard = map (map Left) [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 
-showSquare :: Either Int Symbol -> [Char]
+showSquare :: Either Int Symbol -> String
 showSquare = either (\n -> " " ++ show n ++ " ") (concat . replicate 3 . show)
 
 showBoard :: Board -> String
-showBoard board =
+showBoard =
   unlines .
-  surround "+---+---+---+" . map (concat . surround "|" . map showSquare) $
-  board
+  surround "+---+---+---+" . map (concat . surround "|" . map showSquare)
   where
     surround x xs = [x] ++ intersperse x xs ++ [x]
