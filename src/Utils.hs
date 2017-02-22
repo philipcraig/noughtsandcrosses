@@ -8,8 +8,9 @@ module Utils
   ) where
 
 import Data.List
+import Data.Maybe
 
--- return the first winning set of cells it finds, or Nothing
+-- return the first winning set of Cells it finds, or Nothing
 result :: Board -> Maybe [Cell]
 result board = find full $ rows board ++ cols board ++ diagonals board
   where
@@ -24,14 +25,14 @@ result board = find full $ rows board ++ cols board ++ diagonals board
 finished :: Board -> Bool
 finished b
   | null (unusedPositions b) = True
-  | result b == Nothing = False
+  | isNothing (result b) = False
   | otherwise = True
 
 whoWon :: Board -> String
 whoWon b =
   case result b of
     Nothing -> "Tied game"
-    Just ((Right s):_:_) -> (show s) ++ " player won"
+    Just (Right s : (_ : _)) -> show s ++ " player won"
     _ -> error "can't happen!"
 
 replaceNth :: Int -> Symbol -> Board -> Board
