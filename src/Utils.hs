@@ -1,7 +1,6 @@
 module Utils
 (   result
   , playGame
-  , finished
   , whoWon
   , newBoard
   , unusedPositions
