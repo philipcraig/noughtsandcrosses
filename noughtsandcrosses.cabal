@@ -18,5 +18,7 @@ executable noughtsandcrosses
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
-  other-modules:       Player1, Player2, Utils
+                     , mtl
+                     , random
+  other-modules:       Player1, Player2, Board, AI.Eval, AI.Gametree,AI.Minimax
   ghc-options:         -Wall -Werror -fwarn-tabs

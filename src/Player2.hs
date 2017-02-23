@@ -2,7 +2,13 @@ module Player2
   ( move
   ) where
 
-import Utils
+import Board
 
-move :: Move
-move _s b = last (unusedPositions b)
+import AI.Minimax
+import AI.Eval
+
+move :: MoveF
+-- move b = last (unusedPositions b)
+move b = m
+  where
+  (m, _) = searchMove (alphaBeta simpleVal) 4 b

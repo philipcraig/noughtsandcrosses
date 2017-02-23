@@ -2,7 +2,8 @@ module Player1
   ( move
   ) where
 
-import Utils
+import Board
 
-move :: Move
-move _s b = head (unusedPositions b)
+move :: MoveF
+-- move b = head (unusedPositions b)
+move b = last (unusedPositions b)
