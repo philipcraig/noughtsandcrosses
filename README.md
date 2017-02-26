@@ -1,8 +1,7 @@
 # noughtsandcrosses
 
 ## The Challenge
- 
-The MQA software reading group has decided to dive into Haskell, and someone (either Thomas Trenner or Daan Posthuma) suggested that we should have a noughts-and-crosses challenge to get us into writing Haskell code. So I decided to write a framework that would allow us to write our own "bots" and play them against each other.
+ Someone suggested that we should have a noughts-and-crosses challenge to get us into writing Haskell code. So I decided to write a framework that would allow us to write our own "bots" and play them against each other.
  
 I don't really speak Haskell or understand functional programming very well, so the attached code could probably be improved significantly. But if you're interested in testing your Haskell skillz and noughts-and-crosses game theory, I challenge you to submit a bot!
  
