@@ -4,11 +4,11 @@ module Player2
 
 import Board
 
-import AI.Minimax
 import AI.Eval
+import AI.Minimax
 
 move :: MoveF
 -- move b = last (unusedPositions b)
 move b = m
   where
-  (m, _) = searchMove (alphaBeta simpleVal) 4 b
+    (m, _) = searchMove (alphaBeta simpleVal) 4 b

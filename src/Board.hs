@@ -40,16 +40,17 @@ finished b
 
 -- only defined if called on a game with a winner
 winner :: Board -> Symbol
-winner b = case result b of
-  Just (Right s : (_ : _)) -> s
-  _ -> error "can't happen! (did you call on game with no winner?)"
+winner b =
+  case result b of
+    Just (Right s:(_:_)) -> s
+    _ -> error "can't happen! (did you call on game with no winner?)"
 
 -- only defined if called on a finished game
 whoWon :: Board -> String
 whoWon b =
   case result b of
     Nothing -> "Tied game"
-    Just (Right s : (_ : _)) -> show s ++ " player won"
+    Just (Right s:(_:_)) -> show s ++ " player won"
     _ -> error "can't happen! (did you call on unfinished game?)"
 
 replaceNth :: Int -> Symbol -> Board -> Board
@@ -69,8 +70,7 @@ applyMove index board
   | otherwise = replaceNth index (activePlayer board) board
 
 playGame :: MoveF -> MoveF -> Board
-playGame m1 m2 =
-  playMidGame m2 m1 (applyMove (m1 b) b)
+playGame m1 m2 = playMidGame m2 m1 (applyMove (m1 b) b)
   where
     b = newBoard
 
@@ -114,10 +114,12 @@ showBoard =
 -- encodes the convention that X goes first.
 activePlayer :: Board -> Symbol
 activePlayer b =
-  if count (Right O) cells < count (Right X) cells then O else X
+  if count (Right O) cells < count (Right X) cells
+    then O
+    else X
   where
     cells = concat b
-    count x =  length . filter (==x)
+    count x = length . filter (== x)
 
 -- | instance of the transition system for noughts and crosses
 instance Transitions Board Int where
