@@ -83,14 +83,15 @@ playMidGame m1 m2 b =
 -- the type of a function that computes a move
 type MoveF = Board -> Int
 
--- a board is a list of lists of either position numbers or played symbols
 data Symbol
   = O
   | X
   deriving (Show, Eq)
 
+-- a Cell is either its position number or a played Symbol
 type Cell = Either Int Symbol
 
+-- a board is a list of lists of Cells
 type Board = [[Cell]]
 
 -- return a new board
