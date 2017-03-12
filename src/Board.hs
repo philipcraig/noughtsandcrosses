@@ -115,12 +115,12 @@ showBoard =
 -- encodes the convention that X goes first.
 activePlayer :: Board -> Symbol
 activePlayer b =
-  if count (Right O) cells < count (Right X) cells
+  if count O cells < count X cells
     then O
     else X
   where
     cells = concat b
-    count x = length . filter (== x)
+    count x = length . filter (== Right x)
 
 -- | instance of the transition system for noughts and crosses
 instance Transitions Board Int where
