@@ -2,11 +2,11 @@ name:                noughtsandcrosses
 version:             0.1.0.0
 -- synopsis:
 -- description:
-homepage:            https://cedt-icg-bitbucket.nam.nsroot.net/bitbucket/users/pc29124/repos/noughtsandcrosses
+homepage:            https://github.com/philipcraig/noughtsandcrosses
 license:             BSD3
 license-file:        LICENSE
 author:              Philip Craig
-maintainer:          philip.craig@citi.com
+maintainer:          philip@pobox.com
 copyright:           2017 Philip Craig
 category:            Web
 build-type:          Simple
